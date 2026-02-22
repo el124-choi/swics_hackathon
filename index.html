@@ -6,6 +6,26 @@
     <title>Inclusive Web Review</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Ensure AI boxes expand fully and never clip */
+        .ai-box {
+            overflow: visible !important;
+            height: auto !important;
+            max-height: none !important;
+        }
+        .ai-body {
+            overflow: visible !important;
+            height: auto !important;
+            max-height: none !important;
+            white-space: normal !important;
+        }
+        .ai-body p {
+            margin: 0 0 8px 0;
+        }
+        .ai-body p:last-child {
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -125,74 +145,57 @@
 //  SECTION 1 — CONFIG
 //  Your API key and other site link.
 // ╚═══════════════════════════════════════════════════════════════╝
-const GEMINI_API_KEY   = 'AIzaSyAWT2v67m_nGV8xsSFCPiv5JleyM6IH7mo'; // ← paste your key here
+const GEMINI_API_KEY   = 'AIzaSyCi3Tm8_ZJicFhhU2Q-6Sxj4u-v2Vl4QhA'; // ← paste your key here
 const MY_OTHER_WEBSITE = 'about.html';               // ← your other page
 
 
 // ╔═══════════════════════════════════════════════════════════════╗
 //  SECTION 2 — SYSTEM PROMPT
-//  This is sent to Gemini before EVERY request (both advice and
-//  per-site insight). Change this to set the AI's overall persona,
-//  tone, and rules that apply to all responses.
+//  This is sent to Gemini before EVERY request. Sets the overall
+//  persona, tone, and rules that apply to all responses.
 // ╚═══════════════════════════════════════════════════════════════╝
 const SYSTEM_PROMPT = `You are an expert inclusivity consultant for a website review platform called Inclusive Web Review.
 Your role is to help people evaluate and improve how inclusive websites are — especially for LGBTQ+ individuals, disabled users, and underrepresented communities.
 Always be direct and specific. Never open with pleasantries or filler phrases like "Great question!" or "It's wonderful that...".
-Write in plain sentences only. No bullet points, no numbered lists, no headers, no markdown formatting.
-Keep every response under 120 words.`;
+Write in plain sentences only. No bullet points, no numbered lists, no headers, no markdown formatting of any kind.
+Always write complete sentences — never trail off or leave a sentence unfinished.`;
 
 
 // ╔═══════════════════════════════════════════════════════════════╗
 //  SECTION 3 — REVIEW ADVICE PROMPT
 //  Runs when someone clicks "Get AI Advice on My Review".
-//  Edit the text below to change what the AI looks for and says.
+//  Gives the reviewer concrete suggestions on what ELSE they could
+//  mention — does NOT summarise what they already wrote.
 //
-//  The variables injected automatically are:
+//  Variables injected automatically:
 //    {url}         — the website being reviewed
 //    {ratings}     — the four star ratings
 //    {draftReview} — what the user has written so far
 // ╚═══════════════════════════════════════════════════════════════╝
 function buildAdvicePrompt(url, ratings, draftReview) {
-    return `Website being reviewed: ${url}
-${ratings}
+    return `Website: ${url}. ${ratings}.
+Draft review: "${draftReview}"
 
-Draft review:
-"${draftReview}"
-
-Do exactly three things:
-1. In one sentence, say what the draft does well.
-2. Name the single most important inclusivity detail the reviewer has NOT mentioned — be specific, for example: whether the site uses gender-neutral language in forms, whether images have descriptive alt text, whether there is visible LGBTQ+ representation in photos or content, whether keyboard navigation works, whether colour contrast is sufficient, or whether multiple languages are supported.
-3. Give one exact sentence the reviewer could paste into their review right now.
-
-Three short paragraphs only. No intro sentence.`;
+Do not summarise what they wrote. Suggest 2–3 inclusivity aspects they haven't mentioned (e.g. alt text, keyboard navigation, colour contrast, gender-neutral forms, LGBTQ+ representation). Plain sentences only, 10 sentences max.`;
 }
 
 
 // ╔═══════════════════════════════════════════════════════════════╗
 //  SECTION 4 — PER-SITE INSIGHT PROMPT
 //  Runs when someone clicks "AI Insight for this site".
-//  Edit the text below to change what the AI analyses and reports.
+//  Summarises all reviews for that site in a couple of sentences.
 //
-//  The variables injected automatically are:
+//  Variables injected automatically:
 //    {url}      — the website URL
 //    {count}    — number of reviews submitted for this site
 //    {ratings}  — average star ratings across all reviews
 //    {opinions} — the actual text from each review
 // ╚═══════════════════════════════════════════════════════════════╝
 function buildSiteInsightPrompt(url, count, ratings, opinions) {
-    return `Website: ${url}
-Total reviews: ${count}
-Average ratings out of 5: ${ratings}
+    return `Website: ${url}. ${count} review(s). Average ratings: ${ratings}.
+Reviews: ${opinions}
 
-What reviewers wrote:
-${opinions}
-
-Write exactly three sentences:
-1. State the overall inclusivity level plainly — use a phrase like "poorly inclusive", "moderately inclusive", or "highly inclusive" — and back it up with the scores.
-2. Identify the strongest point AND the weakest point raised across the reviews.
-3. Give one concrete, specific improvement this website should make.
-
-No intro. No outro. Three sentences only.`;
+Write exactly 2–3 sentences summarising the overall rating level, main strength, and main weakness. No more than 3 sentences under any circumstances.`;
 }
 // ═══════════════════════════════════════════════════════════════
 
@@ -206,14 +209,14 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemi
 function apiKeyMissing() { return GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE'; }
 
 // Prepends SYSTEM_PROMPT to every Gemini call
-async function callGemini(userPrompt, maxTokens = 350) {
+async function callGemini(userPrompt) {
     const fullPrompt = SYSTEM_PROMPT + '\n\n---\n\n' + userPrompt;
     const res = await fetch(GEMINI_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             contents: [{ parts: [{ text: fullPrompt }] }],
-            generationConfig: { temperature: 0.6, maxOutputTokens: maxTokens }
+            generationConfig: { temperature: 0.6 }
         })
     });
     if (!res.ok) {
@@ -314,7 +317,7 @@ async function fetchReviewAdvice() {
 
     try {
         const prompt = buildAdvicePrompt(url, ratings, draftText);
-        const text   = await callGemini(prompt, 280);
+        const text   = await callGemini(prompt);
         body.innerHTML = formatAIText(text);
         btn.textContent = '✨ Refresh AI Advice';
     } catch (e) {
@@ -324,13 +327,11 @@ async function fetchReviewAdvice() {
 }
 
 // ── Per-site insight ───────────────────────────────
-// Called from dynamically generated buttons via index only — no URL in onclick
 async function handleSiteInsight(idx) {
     const btnEl  = document.getElementById(`site-btn-${idx}`);
     const bodyEl = document.getElementById(`site-body-${idx}`);
     const boxEl  = document.getElementById(`site-box-${idx}`);
 
-    // Look up data stored when cards were rendered
     const entry = window._siteData && window._siteData[idx];
     if (!entry) { console.error('No site data found for index', idx); return; }
 
@@ -350,11 +351,11 @@ async function handleSiteInsight(idx) {
 
     const avgOf   = key => (reviews.reduce((s, r) => s + (r[key] || 0), 0) / reviews.length).toFixed(1);
     const ratings = `Inclusivity ${avgOf('inclusivity')} · LGBTQ+ ${avgOf('lgbtq')} · UI ${avgOf('ui')} · Usefulness ${avgOf('usefulness')}`;
-    const opinions = reviews.map(r => `"${r.reviewText.slice(0, 200)}"`).join('\n');
+    const opinions = reviews.map(r => `"${r.reviewText.slice(0, 300)}"`).join('\n');
 
     try {
         const prompt = buildSiteInsightPrompt(url, reviews.length, ratings, opinions);
-        const text   = await callGemini(prompt, 250);
+        const text   = await callGemini(prompt);
         bodyEl.innerHTML = formatAIText(text);
         btnEl.textContent = '✨ Refresh Insight';
     } catch (e) {
@@ -427,7 +428,6 @@ function displayReviews(searchTerm = '') {
         groupMap[r.url].push(r);
     });
 
-    // Store site data by numeric index — avoids any URL escaping in onclick
     window._siteData = [];
 
     let html = '';
@@ -477,7 +477,6 @@ function displayReviews(searchTerm = '') {
             </div>`;
         });
 
-        // onclick passes only the numeric index — no URL string, no escaping issues
         html += `
             <button class="site-ai-btn" id="site-btn-${idx}" onclick="handleSiteInsight(${idx})">
                 ✨ AI Insight for this site

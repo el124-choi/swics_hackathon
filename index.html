@@ -7,7 +7,28 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icon.ico">
+    <style>
+    /* Ensure AI boxes expand fully and never clip */
+    .ai-box {
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+    }
+    .ai-body {
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+        white-space: normal !important;
+    }
+    .ai-body p {
+        margin: 0 0 8px 0;
+    }
+    .ai-body p:last-child {
+        margin-bottom: 0;
+    }
+    </style>
 </head>
+
 <body>
 <div class="container">
     <header>

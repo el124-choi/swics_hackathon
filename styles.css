@@ -34,7 +34,34 @@ header {
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     text-align: center;
+
     margin-bottom: 30px;
+}
+
+body {
+  min-height: 100vh;
+  padding: 2rem;
+  color: white;
+
+  /* 1. THE STACK: Just your icons and the gradient */
+  background-image: 
+    url('background.png'), 
+    linear-gradient(135deg, #5f78e9 0%, #cda6f4 100%);
+
+  /* 2. THE REPEAT: Tile the icons, stretch the gradient */
+  background-repeat: 
+    repeat,    /* Tiles your icons infinitely */
+    no-repeat; /* Gradient stays solid */
+
+  /* 3. SIZING */
+  background-size: 
+    100% auto, /* Sets the size of the repeating icon tile */
+    cover;      /* Gradient covers the whole background */
+
+  /* 4. ALIGNMENT */
+  background-position: 
+    top left, 
+    top left;
 }
 
 footer {
@@ -52,7 +79,7 @@ h1 {
     margin-bottom: 10px;
     font-size: 3em;
 
-    background-image: linear-gradient(135deg, #667eea 0%, #bd94e7 100%);
+    background-image: linear-gradient(135deg, #5f78e9 0%, #cda6f4 100%);
     color: transparent;
     background-clip: text;
 }

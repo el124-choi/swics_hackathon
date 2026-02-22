@@ -51,7 +51,6 @@
             margin-bottom: 30px;
         }
 
-        /* ── Tabs ── */
         .tab-buttons { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
 
         .tab-btn {
@@ -81,7 +80,6 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── Form ── */
         .form-group { margin-bottom: 25px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
 
@@ -116,7 +114,6 @@
         }
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
 
-        /* ── AI buttons (generic) ── */
         .ai-trigger-btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             width: 100%; padding: 13px 20px; margin-bottom: 14px;
@@ -128,7 +125,6 @@
         .ai-trigger-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
         .ai-trigger-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* ── Shared AI result box ── */
         .ai-box {
             background: linear-gradient(135deg, #f0f4ff 0%, #f5f0ff 100%);
             border: 2px solid #c9d5fc;
@@ -170,12 +166,10 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ── Browse search ── */
         .search-box { position: relative; margin-bottom: 20px; }
         .search-box input { width: 100%; padding: 14px 48px 14px 14px; }
         .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #667eea; font-size: 1.15em; pointer-events: none; }
 
-        /* ── Review cards ── */
         .review-card {
             background: #f8f9fa; padding: 22px;
             border-radius: 12px; margin-bottom: 20px;
@@ -208,7 +202,6 @@
             margin-bottom: 8px; flex-wrap: wrap; gap: 6px;
         }
 
-        /* ── Per-site AI btn (smaller, inline) ── */
         .site-ai-btn {
             display: inline-flex; align-items: center; gap: 6px;
             margin-top: 14px; padding: 9px 18px;
@@ -230,7 +223,6 @@
         .no-reviews { text-align: center; padding: 55px 20px; color: #aaa; }
         .no-reviews-icon { font-size: 3.5em; margin-bottom: 16px; }
 
-        /* ── Toast ── */
         .toast-notification {
             display: none; position: fixed; top: 20px; right: 20px;
             background: white; padding: 18px 22px; border-radius: 10px;
@@ -273,25 +265,10 @@
 
         <!-- ══ Browse Tab ══ -->
         <div id="browse-tab" class="tab-content">
-
-            <!-- Overall AI summary -->
-            <button class="ai-trigger-btn" id="summariseBtn" onclick="generateOverallSummary()">
-                ✨ Generate AI Summary of All Reviews
-            </button>
-            <div class="ai-box" id="aiSummaryBox">
-                <div class="ai-box-header">
-                    <span>🤖</span>
-                    <strong>Overall Community Insights</strong>
-                    <span class="ai-badge">Gemini AI</span>
-                </div>
-                <div class="ai-body" id="aiSummaryBody"></div>
-            </div>
-
             <div class="search-box">
                 <input type="url" id="searchUrl" placeholder="Search for a website URL...">
                 <span class="search-icon">🔍</span>
             </div>
-
             <div id="reviewsList">
                 <div class="no-reviews">
                     <div class="no-reviews-icon">📝</div>
@@ -357,7 +334,6 @@
                     <textarea id="reviewText" required placeholder="Share your thoughts about this website's inclusivity, accessibility, and overall experience..."></textarea>
                 </div>
 
-                <!-- Manual AI advice button -->
                 <button type="button" class="ai-trigger-btn" id="getAdviceBtn" onclick="fetchReviewAdvice()">
                     ✨ Get AI Advice on My Review
                 </button>
@@ -377,7 +353,6 @@
     </div>
 </div>
 
-<!-- Toast -->
 <div class="toast-notification" id="toastNotification">
     <div class="toast-icon">✓</div>
     <div class="toast-content">
@@ -387,12 +362,83 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════════
-//  CONFIG
-// ══════════════════════════════════════════════════
-const GEMINI_API_KEY   = 'AIzaSyCE6BbNE_ue_NqbherbYQ1pefev6yGIzaM'; // ← paste your key
-const MY_OTHER_WEBSITE = 'about.html';
-// ══════════════════════════════════════════════════
+// ╔═══════════════════════════════════════════════════════════════╗
+//  SECTION 1 — CONFIG
+//  Your API key and other site link.
+// ╚═══════════════════════════════════════════════════════════════╝
+const GEMINI_API_KEY   = 'AIzaSyAWT2v67m_nGV8xsSFCPiv5JleyM6IH7mo'; // ← paste your key here
+const MY_OTHER_WEBSITE = 'about.html';               // ← your other page
+
+
+// ╔═══════════════════════════════════════════════════════════════╗
+//  SECTION 2 — SYSTEM PROMPT
+//  This is sent to Gemini before EVERY request (both advice and
+//  per-site insight). Change this to set the AI's overall persona,
+//  tone, and rules that apply to all responses.
+// ╚═══════════════════════════════════════════════════════════════╝
+const SYSTEM_PROMPT = `You are an expert inclusivity consultant for a website review platform called Inclusive Web Review.
+Your role is to help people evaluate and improve how inclusive websites are — especially for LGBTQ+ individuals, disabled users, and underrepresented communities.
+Always be direct and specific. Never open with pleasantries or filler phrases like "Great question!" or "It's wonderful that...".
+Write in plain sentences only. No bullet points, no numbered lists, no headers, no markdown formatting.
+Keep every response under 120 words.`;
+
+
+// ╔═══════════════════════════════════════════════════════════════╗
+//  SECTION 3 — REVIEW ADVICE PROMPT
+//  Runs when someone clicks "Get AI Advice on My Review".
+//  Edit the text below to change what the AI looks for and says.
+//
+//  The variables injected automatically are:
+//    {url}         — the website being reviewed
+//    {ratings}     — the four star ratings
+//    {draftReview} — what the user has written so far
+// ╚═══════════════════════════════════════════════════════════════╝
+function buildAdvicePrompt(url, ratings, draftReview) {
+    return `Website being reviewed: ${url}
+${ratings}
+
+Draft review:
+"${draftReview}"
+
+Do exactly three things:
+1. In one sentence, say what the draft does well.
+2. Name the single most important inclusivity detail the reviewer has NOT mentioned — be specific, for example: whether the site uses gender-neutral language in forms, whether images have descriptive alt text, whether there is visible LGBTQ+ representation in photos or content, whether keyboard navigation works, whether colour contrast is sufficient, or whether multiple languages are supported.
+3. Give one exact sentence the reviewer could paste into their review right now.
+
+Three short paragraphs only. No intro sentence.`;
+}
+
+
+// ╔═══════════════════════════════════════════════════════════════╗
+//  SECTION 4 — PER-SITE INSIGHT PROMPT
+//  Runs when someone clicks "AI Insight for this site".
+//  Edit the text below to change what the AI analyses and reports.
+//
+//  The variables injected automatically are:
+//    {url}      — the website URL
+//    {count}    — number of reviews submitted for this site
+//    {ratings}  — average star ratings across all reviews
+//    {opinions} — the actual text from each review
+// ╚═══════════════════════════════════════════════════════════════╝
+function buildSiteInsightPrompt(url, count, ratings, opinions) {
+    return `Website: ${url}
+Total reviews: ${count}
+Average ratings out of 5: ${ratings}
+
+What reviewers wrote:
+${opinions}
+
+Write exactly three sentences:
+1. State the overall inclusivity level plainly — use a phrase like "poorly inclusive", "moderately inclusive", or "highly inclusive" — and back it up with the scores.
+2. Identify the strongest point AND the weakest point raised across the reviews.
+3. Give one concrete, specific improvement this website should make.
+
+No intro. No outro. Three sentences only.`;
+}
+// ═══════════════════════════════════════════════════════════════
+
+
+// ── Internals — no need to edit below this line ────────────────
 
 document.getElementById('aboutLink').href = MY_OTHER_WEBSITE;
 
@@ -400,13 +446,14 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemi
 
 function apiKeyMissing() { return GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE'; }
 
-// ── Gemini call ────────────────────────────────────
-async function callGemini(prompt, maxTokens = 400) {
+// Prepends SYSTEM_PROMPT to every Gemini call
+async function callGemini(userPrompt, maxTokens = 350) {
+    const fullPrompt = SYSTEM_PROMPT + '\n\n---\n\n' + userPrompt;
     const res = await fetch(GEMINI_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
+            contents: [{ parts: [{ text: fullPrompt }] }],
             generationConfig: { temperature: 0.6, maxOutputTokens: maxTokens }
         })
     });
@@ -428,7 +475,6 @@ function formatAIText(text) {
             l = l.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             l = l.replace(/\*(.*?)\*/g, '<em>$1</em>');
             if (/^[-*•]\s/.test(l)) return `<p>• ${l.replace(/^[-*•]\s/, '')}</p>`;
-            if (/^\d+\.\s/.test(l)) return `<p>${l}</p>`;
             return `<p>${l}</p>`;
         })
         .join('');
@@ -458,7 +504,6 @@ document.querySelectorAll('.stars').forEach(container => {
     const stars = container.querySelectorAll('.star');
     const type  = container.dataset.rating;
     const input = document.getElementById(`${type}Rating`);
-
     stars.forEach(star => {
         star.addEventListener('click', () => {
             const v = parseInt(star.dataset.value);
@@ -481,17 +526,13 @@ function allRatingsSet() {
     return Object.values(ratingValues).every(v => v > 0);
 }
 
-// ── AI Advice button (Submit tab) ─────────────────
+// ── Review advice ──────────────────────────────────
 async function fetchReviewAdvice() {
     const draftText = document.getElementById('reviewText').value.trim();
     const box  = document.getElementById('aiAdviceBox');
     const body = document.getElementById('aiAdviceBody');
     const btn  = document.getElementById('getAdviceBtn');
 
-    if (!draftText && !allRatingsSet()) {
-        alert('Please fill in your star ratings and write something in the review box first.');
-        return;
-    }
     if (!draftText) {
         alert('Please write something in the review box before getting advice.');
         return;
@@ -502,136 +543,65 @@ async function fetchReviewAdvice() {
     btn.disabled = true;
 
     if (apiKeyMissing()) {
-        body.innerHTML = `<p>⚠️ Paste your Gemini API key into the CONFIG block at the top of the script.</p>`;
+        showError(body, 'Paste your Gemini API key into SECTION 1 at the top of the script.');
         btn.disabled = false;
         return;
     }
 
     const url = document.getElementById('websiteUrl').value.trim() || 'this website';
-    const ratingsLine = allRatingsSet()
-        ? `Ratings: Inclusivity ${ratingValues.inclusivity}/5 · LGBTQ+ ${ratingValues.lgbtq}/5 · UI ${ratingValues.ui}/5 · Usefulness ${ratingValues.usefulness}/5.`
+    const ratings = allRatingsSet()
+        ? `Ratings: Inclusivity ${ratingValues.inclusivity}/5 · LGBTQ+ ${ratingValues.lgbtq}/5 · UI ${ratingValues.ui}/5 · Usefulness ${ratingValues.usefulness}/5`
         : 'No star ratings filled in yet.';
 
-    const prompt = `You are a sharp, concise inclusivity consultant reviewing a draft website review on a platform called Inclusive Web Review.
-
-Website: ${url}
-${ratingsLine}
-
-Draft review:
-"${draftText}"
-
-Be direct and specific — no generic tips, no pleasantries:
-1. One sentence on what the draft does well.
-2. The single most important thing missing that would help readers judge this site's inclusivity — pick something specific like: gender-neutral form fields, image alt text, LGBTQ+ representation in photos, keyboard navigation, colour contrast, language options, or diverse marketing imagery.
-3. One exact sentence the reviewer could paste into their review right now to improve it.
-
-Three short paragraphs. No bullet points, no headers, no markdown. Under 110 words total.`;
-
     try {
-        const text = await callGemini(prompt, 280);
+        const prompt = buildAdvicePrompt(url, ratings, draftText);
+        const text   = await callGemini(prompt, 280);
         body.innerHTML = formatAIText(text);
         btn.textContent = '✨ Refresh AI Advice';
     } catch (e) {
         showError(body, `Gemini error: ${e.message}`);
     }
-
     btn.disabled = false;
 }
 
-// ── Overall summary (Browse tab) ──────────────────
-async function generateOverallSummary() {
-    const reviews = JSON.parse(localStorage.getItem('websiteReviews') || '[]');
-    const btn  = document.getElementById('summariseBtn');
-    const box  = document.getElementById('aiSummaryBox');
-    const body = document.getElementById('aiSummaryBody');
+// ── Per-site insight ───────────────────────────────
+// Called from dynamically generated buttons via index only — no URL in onclick
+async function handleSiteInsight(idx) {
+    const btnEl  = document.getElementById(`site-btn-${idx}`);
+    const bodyEl = document.getElementById(`site-body-${idx}`);
+    const boxEl  = document.getElementById(`site-box-${idx}`);
 
-    box.classList.add('visible');
+    // Look up data stored when cards were rendered
+    const entry = window._siteData && window._siteData[idx];
+    if (!entry) { console.error('No site data found for index', idx); return; }
 
-    if (reviews.length === 0) {
-        body.innerHTML = `<p>No reviews yet — submit some first!</p>`;
-        return;
-    }
-    if (apiKeyMissing()) {
-        body.innerHTML = `<p>⚠️ Paste your Gemini API key into the CONFIG block to enable summaries.</p>`;
-        return;
-    }
+    const { url, reviews } = entry;
 
-    btn.disabled = true;
-    btn.textContent = '⏳ Generating…';
-    showLoading(body, `Reading ${reviews.length} review${reviews.length !== 1 ? 's' : ''}…`);
-
-    const avgOf = key => (reviews.reduce((s, r) => s + (r[key] || 0), 0) / reviews.length).toFixed(1);
-    const digest = reviews.slice(-25).map(r =>
-        `[${r.url}] I:${r.inclusivity} L:${r.lgbtq} UI:${r.ui} U:${r.usefulness} — "${r.reviewText.slice(0, 150)}"`
-    ).join('\n');
-
-    const prompt = `You are a data-driven inclusivity analyst. Here are ${reviews.length} community reviews from Inclusive Web Review.
-
-Community averages (out of 5): Inclusivity ${avgOf('inclusivity')} · LGBTQ+ ${avgOf('lgbtq')} · UI ${avgOf('ui')} · Usefulness ${avgOf('usefulness')}
-
-Reviews (I=Inclusivity, L=LGBTQ+, UI=interface, U=Usefulness):
-${digest}
-
-Write a tight, analytical summary in 3 paragraphs:
-1. What the numbers say — which categories score lowest/highest and what that means.
-2. The most common themes in the written reviews.
-3. One clear actionable takeaway for someone browsing or about to submit a review.
-
-No headers. No bullet points. No markdown. Factual and direct. Under 200 words.`;
-
-    try {
-        const text = await callGemini(prompt, 450);
-        body.innerHTML = formatAIText(text);
-    } catch (e) {
-        showError(body, `Gemini error: ${e.message}`);
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = '✨ Refresh AI Summary';
-}
-
-// ── Per-site AI insight ────────────────────────────
-async function generateSiteInsight(url, siteReviews, btnEl, bodyEl, boxEl) {
     boxEl.classList.add('visible');
-    showLoading(bodyEl, `Analysing ${siteReviews.length} review${siteReviews.length !== 1 ? 's' : ''} for this site…`);
+    showLoading(bodyEl, `Analysing ${reviews.length} review${reviews.length !== 1 ? 's' : ''} for this site…`);
     btnEl.disabled = true;
     btnEl.textContent = '⏳ Thinking…';
 
     if (apiKeyMissing()) {
-        bodyEl.innerHTML = `<p>⚠️ Paste your Gemini API key into the CONFIG block to enable site insights.</p>`;
+        showError(bodyEl, 'Paste your Gemini API key into SECTION 1 at the top of the script.');
         btnEl.disabled = false;
         btnEl.textContent = '✨ AI Insight for this site';
         return;
     }
 
-    const avgOf = key => (siteReviews.reduce((s, r) => s + (r[key] || 0), 0) / siteReviews.length).toFixed(1);
-    const opinions = siteReviews.map(r => `"${r.reviewText.slice(0, 200)}"`).join('\n');
-
-    const prompt = `You are an inclusivity analyst summarising community reviews of a single website.
-
-Website: ${url}
-Number of reviews: ${siteReviews.length}
-Average ratings (out of 5): Inclusivity ${avgOf('inclusivity')} · LGBTQ+ ${avgOf('lgbtq')} · UI ${avgOf('ui')} · Usefulness ${avgOf('usefulness')}
-
-What reviewers said:
-${opinions}
-
-Write a focused 3-sentence assessment:
-1. State the overall inclusivity level plainly — e.g. "poorly inclusive", "moderately inclusive", or "highly inclusive" — and justify it with the scores.
-2. Name the strongest point AND the weakest point raised by reviewers.
-3. One concrete improvement this website should make.
-
-No fluff. No generic AI intros. Plain sentences only. Under 100 words.`;
+    const avgOf   = key => (reviews.reduce((s, r) => s + (r[key] || 0), 0) / reviews.length).toFixed(1);
+    const ratings = `Inclusivity ${avgOf('inclusivity')} · LGBTQ+ ${avgOf('lgbtq')} · UI ${avgOf('ui')} · Usefulness ${avgOf('usefulness')}`;
+    const opinions = reviews.map(r => `"${r.reviewText.slice(0, 200)}"`).join('\n');
 
     try {
-        const text = await callGemini(prompt, 250);
+        const prompt = buildSiteInsightPrompt(url, reviews.length, ratings, opinions);
+        const text   = await callGemini(prompt, 250);
         bodyEl.innerHTML = formatAIText(text);
         btnEl.textContent = '✨ Refresh Insight';
     } catch (e) {
         showError(bodyEl, `Gemini error: ${e.message}`);
         btnEl.textContent = '✨ AI Insight for this site';
     }
-
     btnEl.disabled = false;
 }
 
@@ -691,21 +661,26 @@ function displayReviews(searchTerm = '') {
         return;
     }
 
-    const grouped = {};
-    filtered.forEach(r => { if (!grouped[r.url]) grouped[r.url] = []; grouped[r.url].push(r); });
+    // Group by URL
+    const groupMap = {};
+    filtered.forEach(r => {
+        if (!groupMap[r.url]) groupMap[r.url] = [];
+        groupMap[r.url].push(r);
+    });
+
+    // Store site data by numeric index — avoids any URL escaping in onclick
+    window._siteData = [];
 
     let html = '';
-    // use an index so IDs are simple numbers — no btoa issues
-    Object.keys(grouped).forEach((url, idx) => {
-        const rs  = grouped[url];
-        const avg = key => (rs.reduce((s, r) => s + (r[key] || 0), 0) / rs.length).toFixed(1);
+    Object.keys(groupMap).forEach((url, idx) => {
+        const rs = groupMap[url];
+
+        window._siteData[idx] = { url, reviews: rs };
+
+        const avg     = key => (rs.reduce((s, r) => s + (r[key] || 0), 0) / rs.length).toFixed(1);
         const aI = avg('inclusivity'), aL = avg('lgbtq'), aU = avg('ui'), aUs = avg('usefulness');
         const overall = ((+aI + +aL + +aU + +aUs) / 4).toFixed(1);
         const stars   = n => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
-
-        const boxId  = `site-box-${idx}`;
-        const bodyId = `site-body-${idx}`;
-        const btnId  = `site-btn-${idx}`;
 
         html += `
         <div class="review-card">
@@ -743,43 +718,23 @@ function displayReviews(searchTerm = '') {
             </div>`;
         });
 
-        // Encode review data safely as JSON in a data attribute
-        const reviewData = JSON.stringify(rs.map(r => ({
-            inclusivity: r.inclusivity,
-            lgbtq: r.lgbtq,
-            ui: r.ui,
-            usefulness: r.usefulness,
-            reviewText: r.reviewText
-        })));
-
+        // onclick passes only the numeric index — no URL string, no escaping issues
         html += `
-            <button class="site-ai-btn" id="${btnId}" onclick="handleSiteInsight(${idx}, ${JSON.stringify(url)})">
+            <button class="site-ai-btn" id="site-btn-${idx}" onclick="handleSiteInsight(${idx})">
                 ✨ AI Insight for this site
             </button>
-            <div class="ai-box" id="${boxId}" style="margin-top:12px;">
+            <div class="ai-box" id="site-box-${idx}" style="margin-top:12px;">
                 <div class="ai-box-header">
                     <span>🔍</span>
                     <strong>Site Analysis</strong>
                     <span class="ai-badge">Gemini AI</span>
                 </div>
-                <div class="ai-body" id="${bodyId}"></div>
+                <div class="ai-body" id="site-body-${idx}"></div>
             </div>
         </div>`;
     });
 
     el.innerHTML = html;
-
-    // Store grouped data globally so button handlers can access it
-    window._reviewGroups = grouped;
-}
-
-// Called from the dynamically generated button — looks up data from window._reviewGroups
-function handleSiteInsight(idx, url) {
-    const btnEl  = document.getElementById(`site-btn-${idx}`);
-    const bodyEl = document.getElementById(`site-body-${idx}`);
-    const boxEl  = document.getElementById(`site-box-${idx}`);
-    const siteReviews = window._reviewGroups[url];
-    generateSiteInsight(url, siteReviews, btnEl, bodyEl, boxEl);
 }
 </script>
 </body>

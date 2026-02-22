@@ -281,3 +281,35 @@ textarea { min-height: 120px; resize: vertical; }
     color: transparent !important;
     font-family: 'DM Sans', sans-serif !important;
 }
+
+#google_translate_element {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.01;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.translate-icon, .translate-label {
+    pointer-events: none;
+    position: relative;
+    z-index: 1;
+}
+
+#google_translate_element .goog-te-gadget, #google_translate_element .goog-te-gadget-simple {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+}
+
+/* Hide the "Powered by Google" text and the horizontal top bar */
+.goog-logo-link { display: none !important; }
+.goog-te-gadget { color: transparent !important; }
+.goog-te-banner-frame.skiptranslate { display: none !important; }
+body { top: 0px !important; }

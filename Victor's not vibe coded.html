@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inclusive Web Review - Rate Websites for Accessibility & Inclusivity</title>
+    <title>Inclusive Web Review</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" href="icon.ico">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'DM Sans', sans-serif;
@@ -21,16 +17,13 @@
             color: #333;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .container { max-width: 900px; margin: 0 auto; }
 
         header {
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             text-align: center;
             margin-bottom: 30px;
         }
@@ -42,10 +35,7 @@
             font-size: 2.5em;
         }
 
-        .subtitle {
-            color: #666;
-            font-size: 1.1em;
-        }
+        .subtitle { color: #666; font-size: 1.1em; }
 
         .pride-bar {
             height: 6px;
@@ -58,677 +48,740 @@
             background: white;
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
 
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
+        /* ── Tabs ── */
+        .tab-buttons { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
 
         .tab-btn {
-            flex: 1;
-            min-width: 130px;
-            padding: 15px 20px;
-            border: none;
-            background: #f0f0f0;
-            color: #666;
-            cursor: pointer;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
+            flex: 1; min-width: 130px; padding: 15px 20px;
+            border: none; background: #f0f0f0; color: #666;
+            cursor: pointer; border-radius: 10px; font-size: 1em;
+            font-weight: 600; font-family: 'DM Sans', sans-serif;
             transition: all 0.3s ease;
         }
+        .tab-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .tab-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
-        .tab-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .tab-btn-link {
+            flex: 1; min-width: 130px; padding: 15px 20px;
+            background: #f0f0f0; color: #666; border-radius: 10px;
+            font-size: 1em; font-weight: 600; font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s ease; text-decoration: none;
+            display: flex; align-items: center; justify-content: center;
         }
+        .tab-btn-link:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); background: #e4e4e4; color: #444; }
 
-        .tab-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── About Tab ── */
-        .about-section {
-            max-width: 680px;
-            margin: 0 auto;
-        }
+        /* ── Form ── */
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
 
-        .about-section h2 {
-            font-family: 'DM Serif Display', serif;
-            color: #667eea;
-            font-size: 1.9em;
-            margin-bottom: 6px;
-        }
-
-        .about-section .about-tagline {
-            color: #888;
-            font-size: 1em;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-
-        .about-block {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 24px 28px;
-            margin-bottom: 20px;
-            border-left: 4px solid #667eea;
-        }
-
-        .about-block h3 {
-            font-family: 'DM Serif Display', serif;
-            color: #4a3f9f;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-
-        .about-block p {
-            color: #555;
-            line-height: 1.75;
-            font-size: 0.97em;
-        }
-
-        .about-pride-row {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .about-tag {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 500;
-        }
-
-        /* ── Form Styles ── */
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        input[type="url"],
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1em;
-            font-family: 'DM Sans', sans-serif;
+        input[type="url"], textarea {
+            width: 100%; padding: 12px;
+            border: 2px solid #e0e0e0; border-radius: 8px;
+            font-size: 1em; font-family: 'DM Sans', sans-serif;
             transition: border-color 0.3s ease;
         }
-
-        input[type="url"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
+        input[type="url"]:focus, textarea:focus { outline: none; border-color: #667eea; }
+        textarea { min-height: 120px; resize: vertical; }
 
         .ratings-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 15px; margin-bottom: 25px;
         }
+        .ratings-grid .rating-group { margin-bottom: 0; }
 
-        .ratings-grid .rating-group {
-            margin-bottom: 0;
-        }
+        .rating-group { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .rating-label { font-weight: 600; color: #555; margin-bottom: 6px; display: block; }
 
-        @media (max-width: 600px) {
-            .ratings-grid { grid-template-columns: 1fr; }
-        }
-
-        .rating-group {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .rating-label {
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .stars {
-            display: flex;
-            gap: 10px;
-            font-size: 2em;
-            margin-top: 10px;
-        }
-
-        .star {
-            cursor: pointer;
-            color: #ddd;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .star:hover,
-        .star.active {
-            color: #ffd700;
-            transform: scale(1.2);
-        }
+        .stars { display: flex; gap: 8px; font-size: 1.9em; margin-top: 10px; }
+        .star { cursor: pointer; color: #ddd; transition: all 0.15s ease; user-select: none; }
+        .star:hover, .star.active { color: #ffd700; transform: scale(1.15); }
 
         .submit-btn {
-            width: 100%;
-            padding: 15px;
+            width: 100%; padding: 15px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            color: white; border: none; border-radius: 10px;
+            font-size: 1.1em; font-weight: 600; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; transition: all 0.3s ease;
         }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        /* ── AI buttons (generic) ── */
+        .ai-trigger-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            width: 100%; padding: 13px 20px; margin-bottom: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; border-radius: 10px;
+            font-size: 1em; font-weight: 600; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; transition: all 0.3s ease;
         }
+        .ai-trigger-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
+        .ai-trigger-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* ── Browse Tab ── */
-        .search-box {
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 15px 50px 15px 15px;
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #667eea;
-            font-size: 1.2em;
-        }
-
-        .review-card {
-            background: #f8f9fa;
-            padding: 25px;
+        /* ── Shared AI result box ── */
+        .ai-box {
+            background: linear-gradient(135deg, #f0f4ff 0%, #f5f0ff 100%);
+            border: 2px solid #c9d5fc;
             border-radius: 12px;
+            padding: 18px 20px;
+            display: none;
+            animation: fadeIn 0.35s ease;
             margin-bottom: 20px;
-            border-left: 5px solid #667eea;
-            transition: all 0.3s ease;
+        }
+        .ai-box.visible { display: block; }
+
+        .ai-box-header {
+            display: flex; align-items: center; gap: 9px;
+            margin-bottom: 12px;
+        }
+        .ai-box-header strong { color: #4a3f9f; font-size: 1em; font-weight: 700; }
+        .ai-badge {
+            margin-left: auto;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; font-size: 0.7em; font-weight: 600;
+            padding: 3px 9px; border-radius: 20px; letter-spacing: 0.4px;
+            white-space: nowrap;
         }
 
-        .review-card:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-            transform: translateX(5px);
+        .ai-body { color: #444; font-size: 0.93em; line-height: 1.7; }
+        .ai-body p { margin-bottom: 8px; }
+        .ai-body p:last-child { margin-bottom: 0; }
+
+        .ai-loading {
+            display: flex; align-items: center; gap: 10px;
+            color: #667eea; font-weight: 500; font-size: 0.93em;
         }
+        .ai-spinner {
+            width: 18px; height: 18px; flex-shrink: 0;
+            border: 2.5px solid #c9d5fc;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Browse search ── */
+        .search-box { position: relative; margin-bottom: 20px; }
+        .search-box input { width: 100%; padding: 14px 48px 14px 14px; }
+        .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #667eea; font-size: 1.15em; pointer-events: none; }
+
+        /* ── Review cards ── */
+        .review-card {
+            background: #f8f9fa; padding: 22px;
+            border-radius: 12px; margin-bottom: 20px;
+            border-left: 5px solid #667eea; transition: all 0.25s ease;
+        }
+        .review-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09); transform: translateX(4px); }
 
         .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+            display: flex; justify-content: space-between;
+            align-items: start; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;
         }
-
-        .website-link {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1em;
-            word-break: break-all;
-        }
-
-        .website-link:hover {
-            text-decoration: underline;
-        }
-
-        .review-date {
-            color: #999;
-            font-size: 0.9em;
-        }
+        .website-link { color: #667eea; text-decoration: none; font-weight: 600; font-size: 1.05em; word-break: break-all; }
+        .website-link:hover { text-decoration: underline; }
+        .review-date { color: #aaa; font-size: 0.85em; }
 
         .ratings-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 15px 0;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+            gap: 10px; margin: 12px 0;
+        }
+        .rating-item { background: white; padding: 10px 12px; border-radius: 8px; }
+        .rating-item-label { font-size: 0.85em; color: #777; margin-bottom: 4px; }
+        .rating-item-stars { color: #ffd700; font-size: 1.1em; }
+
+        .individual-review {
+            background: white; padding: 14px 16px; border-radius: 8px;
+            margin-top: 12px; line-height: 1.65; color: #555; font-size: 0.95em;
+        }
+        .individual-review-header {
+            display: flex; justify-content: space-between;
+            margin-bottom: 8px; flex-wrap: wrap; gap: 6px;
         }
 
-        .rating-item {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
+        /* ── Per-site AI btn (smaller, inline) ── */
+        .site-ai-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 14px; padding: 9px 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; border-radius: 8px;
+            font-size: 0.9em; font-weight: 600; font-family: 'DM Sans', sans-serif;
+            cursor: pointer; transition: all 0.25s ease;
         }
-
-        .rating-item-label {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .rating-item-stars {
-            color: #ffd700;
-            font-size: 1.2em;
-        }
-
-        .review-text {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            line-height: 1.6;
-            color: #555;
-        }
-
-        .no-reviews {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-        }
-
-        .no-reviews-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-        }
+        .site-ai-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+        .site-ai-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
         .average-rating {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 600;
+            color: white; padding: 4px 13px; border-radius: 20px;
+            font-size: 0.88em; font-weight: 600;
         }
+
+        .no-reviews { text-align: center; padding: 55px 20px; color: #aaa; }
+        .no-reviews-icon { font-size: 3.5em; margin-bottom: 16px; }
 
         /* ── Toast ── */
         .toast-notification {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 20px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            min-width: 320px;
-            border-left: 4px solid #10b981;
+            display: none; position: fixed; top: 20px; right: 20px;
+            background: white; padding: 18px 22px; border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.18); z-index: 1000;
+            min-width: 300px; border-left: 4px solid #10b981;
         }
-
-        .toast-notification.show {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            animation: slideInRight 0.4s ease;
+        .toast-notification.show { display: flex; align-items: center; gap: 14px; animation: slideIn 0.35s ease; }
+        @keyframes slideIn {
+            from { transform: translateX(380px); opacity: 0; }
+            to   { transform: translateX(0); opacity: 1; }
         }
-
-        @keyframes slideInRight {
-            from { transform: translateX(400px); opacity: 0; }
-            to   { transform: translateX(0);     opacity: 1; }
-        }
-
-        .toast-icon   { font-size: 30px; flex-shrink: 0; }
-        .toast-title  { font-weight: 600; margin-bottom: 5px; color: #333; font-size: 1.1em; }
-        .toast-text   { font-size: 14px; color: #666; }
-
-        .tab-btn-link {
-            flex: 1;
-            min-width: 130px;
-            padding: 15px 20px;
-            border: none;
-            background: #f0f0f0;
-            color: #666;
-            cursor: pointer;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 600;
-            font-family: 'DM Sans', sans-serif;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tab-btn-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            background: #e4e4e4;
-            color: #444;
-        }
+        .toast-icon { font-size: 26px; flex-shrink: 0; }
+        .toast-title { font-weight: 600; margin-bottom: 3px; color: #333; }
+        .toast-text { font-size: 13px; color: #666; }
 
         @media (max-width: 768px) {
             h1 { font-size: 1.8em; }
-            .main-content { padding: 25px; }
-            .tab-btn { min-width: 100%; }
-            .tab-btn-link { min-width: 100%; }
+            .main-content { padding: 22px; }
+            .tab-btn, .tab-btn-link { min-width: 100%; }
+            .ratings-grid { grid-template-columns: 1fr; }
             .ratings-summary { grid-template-columns: 1fr; }
             .toast-notification { right: 10px; left: 10px; min-width: auto; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🌈 Inclusive Web Review</h1>
-            <p class="subtitle">Rate websites for accessibility, inclusivity, and user experience</p>
-            <div class="pride-bar"></div>
-        </header>
+<div class="container">
+    <header>
+        <h1>🌈 Inclusive Web Review</h1>
+        <p class="subtitle">Rate websites for accessibility, inclusivity, and user experience</p>
+        <div class="pride-bar"></div>
+    </header>
 
-        <div class="main-content">
-            <div class="tab-buttons">
-                <button class="tab-btn" onclick="switchTab('browse')">Browse Reviews</button>
-                <button class="tab-btn" onclick="switchTab('submit')">Submit Review</button>
-                <a href="https://YOUR-WEBSITE-URL-HERE.com" target="_blank" id="aboutLink" class="tab-btn-link">About ↗</a>
+    <div class="main-content">
+        <div class="tab-buttons">
+            <button class="tab-btn" onclick="switchTab('browse')">Browse Reviews</button>
+            <button class="tab-btn" onclick="switchTab('submit')">Submit Review</button>
+            <a href="about.html" target="_blank" id="aboutLink" class="tab-btn-link">About ↗</a>
+        </div>
+
+        <!-- ══ Browse Tab ══ -->
+        <div id="browse-tab" class="tab-content">
+
+            <!-- Overall AI summary -->
+            <button class="ai-trigger-btn" id="summariseBtn" onclick="generateOverallSummary()">
+                ✨ Generate AI Summary of All Reviews
+            </button>
+            <div class="ai-box" id="aiSummaryBox">
+                <div class="ai-box-header">
+                    <span>🤖</span>
+                    <strong>Overall Community Insights</strong>
+                    <span class="ai-badge">Gemini AI</span>
+                </div>
+                <div class="ai-body" id="aiSummaryBody"></div>
             </div>
 
-            <!-- Browse Reviews Tab (default) -->
-            <div id="browse-tab" class="tab-content">
-
-                <div class="search-box">
-                    <input type="url" id="searchUrl" placeholder="Search for a website URL...">
-                    <span class="search-icon">🔍</span>
-                </div>
-
-                <div id="reviewsList">
-                    <div class="no-reviews">
-                        <div class="no-reviews-icon">📝</div>
-                        <h3>No reviews yet</h3>
-                        <p>Be the first to submit a review!</p>
-                    </div>
-                </div>
+            <div class="search-box">
+                <input type="url" id="searchUrl" placeholder="Search for a website URL...">
+                <span class="search-icon">🔍</span>
             </div>
 
-            <!-- Submit Review Tab -->
-            <div id="submit-tab" class="tab-content">
+            <div id="reviewsList">
+                <div class="no-reviews">
+                    <div class="no-reviews-icon">📝</div>
+                    <h3>No reviews yet</h3>
+                    <p>Be the first to submit a review!</p>
+                </div>
+            </div>
+        </div>
 
-                <form id="reviewForm">
-                    <div class="form-group">
-                        <label for="websiteUrl">Website URL *</label>
-                        <input type="url" id="websiteUrl" required placeholder="https://example.com">
-                    </div>
+        <!-- ══ Submit Tab ══ -->
+        <div id="submit-tab" class="tab-content">
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label for="websiteUrl">Website URL *</label>
+                    <input type="url" id="websiteUrl" required placeholder="https://example.com">
+                </div>
 
                 <div class="ratings-grid">
                     <div class="rating-group">
                         <label class="rating-label">Inclusivity Rating *</label>
-                        <p style="color:#666;font-size:0.9em;margin-bottom:10px;">How welcoming is this site to diverse users?</p>
+                        <p style="color:#777;font-size:0.88em;margin-bottom:6px;">How welcoming is this site to diverse users?</p>
                         <div class="stars" data-rating="inclusivity">
-                            <span class="star" data-value="1">★</span>
-                            <span class="star" data-value="2">★</span>
-                            <span class="star" data-value="3">★</span>
-                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span><span class="star" data-value="4">★</span>
                             <span class="star" data-value="5">★</span>
                         </div>
-                        <input type="hidden" id="inclusivityRating" required>
+                        <input type="hidden" id="inclusivityRating">
                     </div>
-
                     <div class="rating-group">
                         <label class="rating-label">LGBTQ+ Friendliness *</label>
-                        <p style="color:#666;font-size:0.9em;margin-bottom:10px;">Does this site respect and represent LGBTQ+ individuals?</p>
+                        <p style="color:#777;font-size:0.88em;margin-bottom:6px;">Does this site respect and represent LGBTQ+ individuals?</p>
                         <div class="stars" data-rating="lgbtq">
-                            <span class="star" data-value="1">★</span>
-                            <span class="star" data-value="2">★</span>
-                            <span class="star" data-value="3">★</span>
-                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span><span class="star" data-value="4">★</span>
                             <span class="star" data-value="5">★</span>
                         </div>
-                        <input type="hidden" id="lgbtqRating" required>
+                        <input type="hidden" id="lgbtqRating">
                     </div>
-
                     <div class="rating-group">
                         <label class="rating-label">User Interface (UI) *</label>
-                        <p style="color:#666;font-size:0.9em;margin-bottom:10px;">How intuitive and well-designed is the interface?</p>
+                        <p style="color:#777;font-size:0.88em;margin-bottom:6px;">How intuitive and well-designed is the interface?</p>
                         <div class="stars" data-rating="ui">
-                            <span class="star" data-value="1">★</span>
-                            <span class="star" data-value="2">★</span>
-                            <span class="star" data-value="3">★</span>
-                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span><span class="star" data-value="4">★</span>
                             <span class="star" data-value="5">★</span>
                         </div>
-                        <input type="hidden" id="uiRating" required>
+                        <input type="hidden" id="uiRating">
                     </div>
-
                     <div class="rating-group">
                         <label class="rating-label">Usefulness *</label>
-                        <p style="color:#666;font-size:0.9em;margin-bottom:10px;">How helpful and functional is this website?</p>
+                        <p style="color:#777;font-size:0.88em;margin-bottom:6px;">How helpful and functional is this website?</p>
                         <div class="stars" data-rating="usefulness">
-                            <span class="star" data-value="1">★</span>
-                            <span class="star" data-value="2">★</span>
-                            <span class="star" data-value="3">★</span>
-                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="1">★</span><span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span><span class="star" data-value="4">★</span>
                             <span class="star" data-value="5">★</span>
                         </div>
-                        <input type="hidden" id="usefulnessRating" required>
+                        <input type="hidden" id="usefulnessRating">
                     </div>
                 </div>
 
-                    <div class="form-group">
-                        <label for="reviewText">Your Review *</label>
-                        <textarea id="reviewText" required placeholder="Share your thoughts about this website's inclusivity, accessibility, and overall experience..."></textarea>
+                <div class="form-group">
+                    <label for="reviewText">Your Review *</label>
+                    <textarea id="reviewText" required placeholder="Share your thoughts about this website's inclusivity, accessibility, and overall experience..."></textarea>
+                </div>
+
+                <!-- Manual AI advice button -->
+                <button type="button" class="ai-trigger-btn" id="getAdviceBtn" onclick="fetchReviewAdvice()">
+                    ✨ Get AI Advice on My Review
+                </button>
+
+                <div class="ai-box" id="aiAdviceBox">
+                    <div class="ai-box-header">
+                        <span>✨</span>
+                        <strong>AI Review Advice</strong>
+                        <span class="ai-badge">Gemini AI</span>
                     </div>
+                    <div class="ai-body" id="aiAdviceBody"></div>
+                </div>
 
-                    <button type="submit" class="submit-btn">Submit Review</button>
-                </form>
+                <button type="submit" class="submit-btn">Submit Review</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-notification" id="toastNotification">
+    <div class="toast-icon">✓</div>
+    <div class="toast-content">
+        <div class="toast-title">Review Submitted!</div>
+        <div class="toast-text">Thank you for making the web more inclusive 🌈</div>
+    </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════════════
+const GEMINI_API_KEY   = 'AIzaSyCE6BbNE_ue_NqbherbYQ1pefev6yGIzaM'; // ← paste your key
+const MY_OTHER_WEBSITE = 'about.html';
+// ══════════════════════════════════════════════════
+
+document.getElementById('aboutLink').href = MY_OTHER_WEBSITE;
+
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+function apiKeyMissing() { return GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE'; }
+
+// ── Gemini call ────────────────────────────────────
+async function callGemini(prompt, maxTokens = 400) {
+    const res = await fetch(GEMINI_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.6, maxOutputTokens: maxTokens }
+        })
+    });
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+}
+
+function formatAIText(text) {
+    return text
+        .replace(/#{1,4} .+/g, '')
+        .split('\n')
+        .map(l => l.trim())
+        .filter(l => l.length > 1)
+        .map(l => {
+            l = l.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            l = l.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            if (/^[-*•]\s/.test(l)) return `<p>• ${l.replace(/^[-*•]\s/, '')}</p>`;
+            if (/^\d+\.\s/.test(l)) return `<p>${l}</p>`;
+            return `<p>${l}</p>`;
+        })
+        .join('');
+}
+
+function showLoading(el, msg) {
+    el.innerHTML = `<div class="ai-loading"><div class="ai-spinner"></div>${msg}</div>`;
+}
+function showError(el, msg) {
+    el.innerHTML = `<p style="color:#c0392b;">⚠️ ${msg}</p>`;
+}
+
+// ── Tabs ───────────────────────────────────────────
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn')[{ browse: 0, submit: 1 }[tab]].classList.add('active');
+    document.getElementById(`${tab}-tab`).classList.add('active');
+    if (tab === 'browse') displayReviews();
+}
+switchTab('browse');
+
+// ── Stars ──────────────────────────────────────────
+const ratingValues = { inclusivity: 0, lgbtq: 0, ui: 0, usefulness: 0 };
+
+document.querySelectorAll('.stars').forEach(container => {
+    const stars = container.querySelectorAll('.star');
+    const type  = container.dataset.rating;
+    const input = document.getElementById(`${type}Rating`);
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const v = parseInt(star.dataset.value);
+            input.value = v;
+            ratingValues[type] = v;
+            stars.forEach((s, i) => s.classList.toggle('active', i < v));
+        });
+        star.addEventListener('mouseenter', () => {
+            const v = parseInt(star.dataset.value);
+            stars.forEach((s, i) => s.style.color = i < v ? '#ffd700' : '#ddd');
+        });
+        container.addEventListener('mouseleave', () => {
+            const cur = ratingValues[type] || 0;
+            stars.forEach((s, i) => s.style.color = i < cur ? '#ffd700' : '#ddd');
+        });
+    });
+});
+
+function allRatingsSet() {
+    return Object.values(ratingValues).every(v => v > 0);
+}
+
+// ── AI Advice button (Submit tab) ─────────────────
+async function fetchReviewAdvice() {
+    const draftText = document.getElementById('reviewText').value.trim();
+    const box  = document.getElementById('aiAdviceBox');
+    const body = document.getElementById('aiAdviceBody');
+    const btn  = document.getElementById('getAdviceBtn');
+
+    if (!draftText && !allRatingsSet()) {
+        alert('Please fill in your star ratings and write something in the review box first.');
+        return;
+    }
+    if (!draftText) {
+        alert('Please write something in the review box before getting advice.');
+        return;
+    }
+
+    box.classList.add('visible');
+    showLoading(body, 'Reading your review…');
+    btn.disabled = true;
+
+    if (apiKeyMissing()) {
+        body.innerHTML = `<p>⚠️ Paste your Gemini API key into the CONFIG block at the top of the script.</p>`;
+        btn.disabled = false;
+        return;
+    }
+
+    const url = document.getElementById('websiteUrl').value.trim() || 'this website';
+    const ratingsLine = allRatingsSet()
+        ? `Ratings: Inclusivity ${ratingValues.inclusivity}/5 · LGBTQ+ ${ratingValues.lgbtq}/5 · UI ${ratingValues.ui}/5 · Usefulness ${ratingValues.usefulness}/5.`
+        : 'No star ratings filled in yet.';
+
+    const prompt = `You are a sharp, concise inclusivity consultant reviewing a draft website review on a platform called Inclusive Web Review.
+
+Website: ${url}
+${ratingsLine}
+
+Draft review:
+"${draftText}"
+
+Be direct and specific — no generic tips, no pleasantries:
+1. One sentence on what the draft does well.
+2. The single most important thing missing that would help readers judge this site's inclusivity — pick something specific like: gender-neutral form fields, image alt text, LGBTQ+ representation in photos, keyboard navigation, colour contrast, language options, or diverse marketing imagery.
+3. One exact sentence the reviewer could paste into their review right now to improve it.
+
+Three short paragraphs. No bullet points, no headers, no markdown. Under 110 words total.`;
+
+    try {
+        const text = await callGemini(prompt, 280);
+        body.innerHTML = formatAIText(text);
+        btn.textContent = '✨ Refresh AI Advice';
+    } catch (e) {
+        showError(body, `Gemini error: ${e.message}`);
+    }
+
+    btn.disabled = false;
+}
+
+// ── Overall summary (Browse tab) ──────────────────
+async function generateOverallSummary() {
+    const reviews = JSON.parse(localStorage.getItem('websiteReviews') || '[]');
+    const btn  = document.getElementById('summariseBtn');
+    const box  = document.getElementById('aiSummaryBox');
+    const body = document.getElementById('aiSummaryBody');
+
+    box.classList.add('visible');
+
+    if (reviews.length === 0) {
+        body.innerHTML = `<p>No reviews yet — submit some first!</p>`;
+        return;
+    }
+    if (apiKeyMissing()) {
+        body.innerHTML = `<p>⚠️ Paste your Gemini API key into the CONFIG block to enable summaries.</p>`;
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Generating…';
+    showLoading(body, `Reading ${reviews.length} review${reviews.length !== 1 ? 's' : ''}…`);
+
+    const avgOf = key => (reviews.reduce((s, r) => s + (r[key] || 0), 0) / reviews.length).toFixed(1);
+    const digest = reviews.slice(-25).map(r =>
+        `[${r.url}] I:${r.inclusivity} L:${r.lgbtq} UI:${r.ui} U:${r.usefulness} — "${r.reviewText.slice(0, 150)}"`
+    ).join('\n');
+
+    const prompt = `You are a data-driven inclusivity analyst. Here are ${reviews.length} community reviews from Inclusive Web Review.
+
+Community averages (out of 5): Inclusivity ${avgOf('inclusivity')} · LGBTQ+ ${avgOf('lgbtq')} · UI ${avgOf('ui')} · Usefulness ${avgOf('usefulness')}
+
+Reviews (I=Inclusivity, L=LGBTQ+, UI=interface, U=Usefulness):
+${digest}
+
+Write a tight, analytical summary in 3 paragraphs:
+1. What the numbers say — which categories score lowest/highest and what that means.
+2. The most common themes in the written reviews.
+3. One clear actionable takeaway for someone browsing or about to submit a review.
+
+No headers. No bullet points. No markdown. Factual and direct. Under 200 words.`;
+
+    try {
+        const text = await callGemini(prompt, 450);
+        body.innerHTML = formatAIText(text);
+    } catch (e) {
+        showError(body, `Gemini error: ${e.message}`);
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = '✨ Refresh AI Summary';
+}
+
+// ── Per-site AI insight ────────────────────────────
+async function generateSiteInsight(url, siteReviews, btnEl, bodyEl, boxEl) {
+    boxEl.classList.add('visible');
+    showLoading(bodyEl, `Analysing ${siteReviews.length} review${siteReviews.length !== 1 ? 's' : ''} for this site…`);
+    btnEl.disabled = true;
+    btnEl.textContent = '⏳ Thinking…';
+
+    if (apiKeyMissing()) {
+        bodyEl.innerHTML = `<p>⚠️ Paste your Gemini API key into the CONFIG block to enable site insights.</p>`;
+        btnEl.disabled = false;
+        btnEl.textContent = '✨ AI Insight for this site';
+        return;
+    }
+
+    const avgOf = key => (siteReviews.reduce((s, r) => s + (r[key] || 0), 0) / siteReviews.length).toFixed(1);
+    const opinions = siteReviews.map(r => `"${r.reviewText.slice(0, 200)}"`).join('\n');
+
+    const prompt = `You are an inclusivity analyst summarising community reviews of a single website.
+
+Website: ${url}
+Number of reviews: ${siteReviews.length}
+Average ratings (out of 5): Inclusivity ${avgOf('inclusivity')} · LGBTQ+ ${avgOf('lgbtq')} · UI ${avgOf('ui')} · Usefulness ${avgOf('usefulness')}
+
+What reviewers said:
+${opinions}
+
+Write a focused 3-sentence assessment:
+1. State the overall inclusivity level plainly — e.g. "poorly inclusive", "moderately inclusive", or "highly inclusive" — and justify it with the scores.
+2. Name the strongest point AND the weakest point raised by reviewers.
+3. One concrete improvement this website should make.
+
+No fluff. No generic AI intros. Plain sentences only. Under 100 words.`;
+
+    try {
+        const text = await callGemini(prompt, 250);
+        bodyEl.innerHTML = formatAIText(text);
+        btnEl.textContent = '✨ Refresh Insight';
+    } catch (e) {
+        showError(bodyEl, `Gemini error: ${e.message}`);
+        btnEl.textContent = '✨ AI Insight for this site';
+    }
+
+    btnEl.disabled = false;
+}
+
+// ── Toast ──────────────────────────────────────────
+function showToast() {
+    const t = document.getElementById('toastNotification');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 5000);
+}
+
+// ── Form submit ────────────────────────────────────
+document.getElementById('reviewForm').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!allRatingsSet()) { alert('Please fill in all four star ratings.'); return; }
+
+    const review = {
+        url:         document.getElementById('websiteUrl').value,
+        inclusivity: ratingValues.inclusivity,
+        lgbtq:       ratingValues.lgbtq,
+        ui:          ratingValues.ui,
+        usefulness:  ratingValues.usefulness,
+        reviewText:  document.getElementById('reviewText').value,
+        date:        new Date().toISOString()
+    };
+
+    const all = JSON.parse(localStorage.getItem('websiteReviews') || '[]');
+    all.push(review);
+    localStorage.setItem('websiteReviews', JSON.stringify(all));
+
+    showToast();
+    document.getElementById('reviewForm').reset();
+    document.querySelectorAll('.star').forEach(s => { s.classList.remove('active'); s.style.color = '#ddd'; });
+    document.querySelectorAll('input[type="hidden"]').forEach(i => i.value = '');
+    Object.keys(ratingValues).forEach(k => ratingValues[k] = 0);
+    document.getElementById('aiAdviceBox').classList.remove('visible');
+    document.getElementById('getAdviceBtn').textContent = '✨ Get AI Advice on My Review';
+});
+
+// ── Search ─────────────────────────────────────────
+document.getElementById('searchUrl').addEventListener('input', e => displayReviews(e.target.value));
+
+// ── Display reviews ────────────────────────────────
+function displayReviews(searchTerm = '') {
+    const all = JSON.parse(localStorage.getItem('websiteReviews') || '[]');
+    const el  = document.getElementById('reviewsList');
+
+    const filtered = searchTerm
+        ? all.filter(r => r.url.toLowerCase().includes(searchTerm.toLowerCase()))
+        : all;
+
+    if (filtered.length === 0) {
+        el.innerHTML = `<div class="no-reviews">
+            <div class="no-reviews-icon">${searchTerm ? '🔍' : '📝'}</div>
+            <h3>${searchTerm ? 'No reviews found' : 'No reviews yet'}</h3>
+            <p>${searchTerm ? 'Try a different URL' : 'Be the first to submit a review!'}</p>
+        </div>`;
+        return;
+    }
+
+    const grouped = {};
+    filtered.forEach(r => { if (!grouped[r.url]) grouped[r.url] = []; grouped[r.url].push(r); });
+
+    let html = '';
+    // use an index so IDs are simple numbers — no btoa issues
+    Object.keys(grouped).forEach((url, idx) => {
+        const rs  = grouped[url];
+        const avg = key => (rs.reduce((s, r) => s + (r[key] || 0), 0) / rs.length).toFixed(1);
+        const aI = avg('inclusivity'), aL = avg('lgbtq'), aU = avg('ui'), aUs = avg('usefulness');
+        const overall = ((+aI + +aL + +aU + +aUs) / 4).toFixed(1);
+        const stars   = n => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+
+        const boxId  = `site-box-${idx}`;
+        const bodyId = `site-body-${idx}`;
+        const btnId  = `site-btn-${idx}`;
+
+        html += `
+        <div class="review-card">
+            <div class="review-header">
+                <a href="${url}" target="_blank" class="website-link">${url}</a>
+                <span class="average-rating">⭐ ${overall} / 5.0</span>
             </div>
+            <div class="ratings-summary">
+                <div class="rating-item">
+                    <div class="rating-item-label">Inclusivity</div>
+                    <div class="rating-item-stars">${stars(aI)} ${aI}</div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-item-label">LGBTQ+ Friendly</div>
+                    <div class="rating-item-stars">${stars(aL)} ${aL}</div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-item-label">User Interface</div>
+                    <div class="rating-item-stars">${stars(aU)} ${aU}</div>
+                </div>
+                <div class="rating-item">
+                    <div class="rating-item-label">Usefulness</div>
+                    <div class="rating-item-stars">${stars(aUs)} ${aUs}</div>
+                </div>
+            </div>`;
 
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div class="toast-notification" id="toastNotification">
-        <div class="toast-icon">✓</div>
-        <div class="toast-content">
-            <div class="toast-title">Review Submitted!</div>
-            <div class="toast-text">Thank you for making the web more inclusive 🌈</div>
-        </div>
-    </div>
-
-    <script>
-        // ── Config: set your About/other website URL here ────────────────────
-        const MY_OTHER_WEBSITE = 'https://YOUR-WEBSITE-URL-HERE.com'; // ← replace this!
-        document.getElementById('aboutLink').href = MY_OTHER_WEBSITE;
-        // ─────────────────────────────────────────────────────────────────────
-
-        // ── Tab switching ─────────────────────────────────────────────────────
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-            const tabMap = { browse: 0, submit: 1 };
-            document.querySelectorAll('.tab-btn')[tabMap[tab]].classList.add('active');
-            document.getElementById(`${tab}-tab`).classList.add('active');
-
-            if (tab === 'browse') displayReviews();
-        }
-
-        // Start on Browse Reviews
-        switchTab('browse');
-
-        // ── Star rating functionality ─────────────────────────────────────────
-        document.querySelectorAll('.stars').forEach(starsContainer => {
-            const stars = starsContainer.querySelectorAll('.star');
-            const ratingType = starsContainer.dataset.rating;
-            const hiddenInput = document.getElementById(`${ratingType}Rating`);
-
-            stars.forEach(star => {
-                star.addEventListener('click', () => {
-                    const value = parseInt(star.dataset.value);
-                    hiddenInput.value = value;
-                    stars.forEach((s, i) => s.classList.toggle('active', i < value));
-                });
-
-                star.addEventListener('mouseenter', () => {
-                    const value = parseInt(star.dataset.value);
-                    stars.forEach((s, i) => s.style.color = i < value ? '#ffd700' : '#ddd');
-                });
-
-                starsContainer.addEventListener('mouseleave', () => {
-                    const cur = parseInt(hiddenInput.value) || 0;
-                    stars.forEach((s, i) => s.style.color = i < cur ? '#ffd700' : '#ddd');
-                });
-            });
+        rs.forEach(r => {
+            html += `
+            <div class="individual-review">
+                <div class="individual-review-header">
+                    <span style="font-weight:600;color:#667eea;font-size:0.9em;">Review</span>
+                    <span class="review-date">${new Date(r.date).toLocaleDateString()}</span>
+                </div>
+                ${r.reviewText}
+            </div>`;
         });
 
-        // ── Toast ─────────────────────────────────────────────────────────────
-        function showToast() {
-            const toast = document.getElementById('toastNotification');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 5000);
-        }
+        // Encode review data safely as JSON in a data attribute
+        const reviewData = JSON.stringify(rs.map(r => ({
+            inclusivity: r.inclusivity,
+            lgbtq: r.lgbtq,
+            ui: r.ui,
+            usefulness: r.usefulness,
+            reviewText: r.reviewText
+        })));
 
-        // ── Form submission ───────────────────────────────────────────────────
-        document.getElementById('reviewForm').addEventListener('submit', (e) => {
-            e.preventDefault();
+        html += `
+            <button class="site-ai-btn" id="${btnId}" onclick="handleSiteInsight(${idx}, ${JSON.stringify(url)})">
+                ✨ AI Insight for this site
+            </button>
+            <div class="ai-box" id="${boxId}" style="margin-top:12px;">
+                <div class="ai-box-header">
+                    <span>🔍</span>
+                    <strong>Site Analysis</strong>
+                    <span class="ai-badge">Gemini AI</span>
+                </div>
+                <div class="ai-body" id="${bodyId}"></div>
+            </div>
+        </div>`;
+    });
 
-            const review = {
-                url:        document.getElementById('websiteUrl').value,
-                inclusivity: parseInt(document.getElementById('inclusivityRating').value),
-                lgbtq:       parseInt(document.getElementById('lgbtqRating').value),
-                ui:          parseInt(document.getElementById('uiRating').value),
-                usefulness:  parseInt(document.getElementById('usefulnessRating').value),
-                reviewText:  document.getElementById('reviewText').value,
-                date:        new Date().toISOString()
-            };
+    el.innerHTML = html;
 
-            if (!review.inclusivity || !review.lgbtq || !review.ui || !review.usefulness) {
-                alert('Please provide all ratings before submitting.');
-                return;
-            }
+    // Store grouped data globally so button handlers can access it
+    window._reviewGroups = grouped;
+}
 
-            const reviews = JSON.parse(localStorage.getItem('websiteReviews') || '[]');
-            reviews.push(review);
-            localStorage.setItem('websiteReviews', JSON.stringify(reviews));
-
-            showToast();
-
-            document.getElementById('reviewForm').reset();
-            document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('input[type="hidden"]').forEach(i => i.value = '');
-        });
-
-        // ── Search ────────────────────────────────────────────────────────────
-        document.getElementById('searchUrl').addEventListener('input', (e) => {
-            displayReviews(e.target.value);
-        });
-
-        // ── Display reviews ───────────────────────────────────────────────────
-        function displayReviews(searchTerm = '') {
-            const reviews = JSON.parse(localStorage.getItem('websiteReviews') || '[]');
-            const reviewsList = document.getElementById('reviewsList');
-
-            let filtered = searchTerm
-                ? reviews.filter(r => r.url.toLowerCase().includes(searchTerm.toLowerCase()))
-                : reviews;
-
-            if (filtered.length === 0) {
-                reviewsList.innerHTML = `
-                    <div class="no-reviews">
-                        <div class="no-reviews-icon">${searchTerm ? '🔍' : '📝'}</div>
-                        <h3>${searchTerm ? 'No reviews found' : 'No reviews yet'}</h3>
-                        <p>${searchTerm ? 'Try searching for a different URL' : 'Be the first to submit a review!'}</p>
-                    </div>`;
-                return;
-            }
-
-            const grouped = {};
-            filtered.forEach(r => {
-                if (!grouped[r.url]) grouped[r.url] = [];
-                grouped[r.url].push(r);
-            });
-
-            let html = '';
-            Object.keys(grouped).forEach(url => {
-                const rs = grouped[url];
-                const avg = key => (rs.reduce((s, r) => s + r[key], 0) / rs.length).toFixed(1);
-                const aI = avg('inclusivity'), aL = avg('lgbtq'), aU = avg('ui'), aUs = avg('usefulness');
-                const overall = ((+aI + +aL + +aU + +aUs) / 4).toFixed(1);
-                const stars = n => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
-
-                html += `
-                    <div class="review-card">
-                        <div class="review-header">
-                            <a href="${url}" target="_blank" class="website-link">${url}</a>
-                            <span class="average-rating">⭐ ${overall} / 5.0</span>
-                        </div>
-                        <div class="ratings-summary">
-                            <div class="rating-item">
-                                <div class="rating-item-label">Inclusivity</div>
-                                <div class="rating-item-stars">${stars(aI)} ${aI}</div>
-                            </div>
-                            <div class="rating-item">
-                                <div class="rating-item-label">LGBTQ+ Friendly</div>
-                                <div class="rating-item-stars">${stars(aL)} ${aL}</div>
-                            </div>
-                            <div class="rating-item">
-                                <div class="rating-item-label">User Interface</div>
-                                <div class="rating-item-stars">${stars(aU)} ${aU}</div>
-                            </div>
-                            <div class="rating-item">
-                                <div class="rating-item-label">Usefulness</div>
-                                <div class="rating-item-stars">${stars(aUs)} ${aUs}</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:15px;color:#666;">
-                            <strong>${rs.length}</strong> review${rs.length > 1 ? 's' : ''}
-                        </div>`;
-
-                rs.forEach(r => {
-                    html += `
-                        <div class="review-text">
-                            <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                                <span style="font-weight:600;color:#667eea;">Review</span>
-                                <span class="review-date">${new Date(r.date).toLocaleDateString()}</span>
-                            </div>
-                            ${r.reviewText}
-                        </div>`;
-                });
-
-                html += `</div>`;
-            });
-
-            reviewsList.innerHTML = html;
-        }
-    </script>
+// Called from the dynamically generated button — looks up data from window._reviewGroups
+function handleSiteInsight(idx, url) {
+    const btnEl  = document.getElementById(`site-btn-${idx}`);
+    const bodyEl = document.getElementById(`site-body-${idx}`);
+    const boxEl  = document.getElementById(`site-box-${idx}`);
+    const siteReviews = window._reviewGroups[url];
+    generateSiteInsight(url, siteReviews, btnEl, bodyEl, boxEl);
+}
+</script>
 </body>
 </html>

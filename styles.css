@@ -11,10 +11,19 @@
 
 body {
     font-family: 'DM Sans', 'Times New Roman', Times, serif;
+    background-image: url(background.png); 
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    padding: 20px;
+    padding: 0px;
+    padding-top: 20px;
     color: #333;
+}
+
+#background-image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
 }
 
 .container { max-width: 900px; margin: 0 auto; }
@@ -28,11 +37,29 @@ header {
     margin-bottom: 30px;
 }
 
+footer {
+    width: 100%;
+    margin-top: 50px;
+    background-color: rgb(237, 237, 237);
+    padding: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
 h1 {
     font-family: 'Momentz';
-    color: #667eea;
+    /* color: #667eea; */
     margin-bottom: 10px;
     font-size: 3em;
+
+    background-image: linear-gradient(135deg, #667eea 0%, #bd94e7 100%);
+    color: transparent;
+    background-clip: text;
+}
+
+#rainbow {
+    background-image: none;
+    color: initial;
 }
 
 .subtitle { color: #666; font-size: 1.1em; font-family: 'Momentz'; font-weight: 100; }

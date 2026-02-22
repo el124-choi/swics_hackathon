@@ -48,14 +48,81 @@
                 margin: 0 auto 30px auto;
                 border-radius: 2px;
             }
+            .reveal {
+                opacity: 0;
+                transform: translateY(30px); /* Move down slightly */
+                transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); /* "Out-Quart" easing */
+                transition-delay: var(--delay, 0s);
+                will-change: transform, opacity;
+            }
+            .reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .reveal:nth-child(2) {
+                transition-delay: 0.2s;
+            }
         </style>
     </head>
     <body>
         <h1 class="page-title">About Us</h1>
-        <div class="about-card">
+        <div class="about-card reveal">
             <div class="accent-line"></div>
             <h1>Why did we get started?</h1>
             <p>We aimed to create a tool through which underepresented communities can make their voices heard and find their safe spaces. We aim to help make everyone feel included and welcome, and encourage people to be more responsible with which businesses they support by providing all the necessary information for spenders to make informed decisions.</p>
-        </div>    
+        </div>  
+        <div class="about-card reveal">
+            <div class="accent-line"></div>
+            <h1>Our Values</h1>
+            <p>
+                We aim to put accessibility first, our site started out and will always be for everyone. We are led by the community for the community making sure everyone has a voice and can be heard. We are determined to help everyone find their safe space.
+            </p>
+        </div>  
+        <div class="about-card reveal">
+            <div class="accent-line"></div>
+            <h1>Community Guidelines</h1>
+            <p>
+                We want everyone to be heard, however we also want to make sure that the reviews posted are factual, free from hate speech and discrimination, and any criticism is constructive. We monitor the reviews posted carefully to make sure our site remains safe and truthful for everyone.
+            </p>
+        </div> 
+        <div class="about-card reveal">
+            <div class="accent-line"></div>
+            <h1>FAQs</h1>
+            <p>
+                <details>
+                    <summary>Are my reviews anonymous?</summary>
+                    <p>Yes! We value user privacy therefore your reviews are posted without any possible personal information.</p>
+                </details>
+                <details>
+                    <summary>How do we verify ratings?</summary>
+                    <p>We rely on community moderation so if a review does get flagged our team will be looking into it and potentially removing it if it violates guidelines.</p>
+                </details>
+                <details>
+                    <summary>Can I change a review later?</summary>
+                    <p>Unfortunately once posted you cannot change your review, however you can always contact one of the team to remove your review later, and post a new corrected one at any time.</p>
+                </details>
+            </p>
+        </div> 
+        <script> 
+            const observer = new IntersectionObserver((entries) => {
+                const allCards = Array.from(document.querySelectorAll('.reveal'));
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const index = allCards.indexOf(entry.target);
+                    
+                        // Apply the delay based on its position
+                        entry.target.style.setProperty('--delay', `${index * 0.3}s`);
+                        entry.target.classList.add('active');
+                    
+                        // Stop watching this card once it has appeared
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+
+            });
+            document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+        </script>
     </body>
 </html>
